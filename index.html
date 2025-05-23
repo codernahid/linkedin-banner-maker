@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional LinkedIn Banner Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0077B5;
+            --primary-dark: #006097;
+            --secondary: #F5F5F5;
+            --text: #333333;
+            --light-text: #777777;
+            --white: #FFFFFF;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f9f9f9;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin: 30px 0;
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: var(--light-text);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .editor-panel {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+        .preview-panel {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+        .banner-container {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px;
+            color: white;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
+        }
+        .banner-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .banner-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .banner-tagline {
+            font-size: 1rem;
+            max-width: 80%;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 119, 181, 0.2);
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .color-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        .color-option.selected {
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .btn i {
+            margin-right: 8px;
+        }
+        .template-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .template {
+            height: 80px;
+            border-radius: 5px;
+            cursor: pointer;
+            background-size: cover;
+            position: relative;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+        .template:hover {
+            transform: scale(1.05);
+        }
+        .template.selected {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+        .template-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+        }
+        .download-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .social-icons {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .social-icon {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 0.9rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .social-icon:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        .advanced-options {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .toggle-advanced {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .toggle-advanced i {
+            transition: var(--transition);
+        }
+        .advanced-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .advanced-content.show {
+            max-height: 500px;
+        }
+        .text-align-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .text-align-btn {
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .text-align-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .font-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .font-option {
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .font-option.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .upload-container {
+            margin-top: 15px;
+        }
+        .upload-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #f0f0f0;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            width: 100%;
+        }
+        .upload-btn:hover {
+            background: #e0e0e0;
+            border-color: #aaa;
+        }
+        #imageUpload {
+            display: none;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            .template-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>LinkedIn Banner Generator</h1>
+            <p class="subtitle">Create a professional LinkedIn header image in seconds</p>
+        </header>
+
+        <div class="app-container">
+            <div class="editor-panel">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" placeholder="John Doe" value="John Doe">
+                </div>
+
+                <div class="form-group">
+                    <label for="jobTitle">Job Title</label>
+                    <input type="text" id="jobTitle" placeholder="Digital Marketing Specialist" value="Digital Marketing Specialist">
+                </div>
+
+                <div class="form-group">
+                    <label for="tagline">Tagline</label>
+                    <textarea id="tagline" placeholder="Helping brands grow through strategic marketing">Helping brands grow through strategic marketing</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Template</label>
+                    <div class="template-options">
+                        <div class="template selected" data-template="1" style="background-image: url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');">
+                            <div class="template-overlay"></div>
+                        </div>
+                        <div class="template" data-template="2" style="background-image: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');">
+                            <div class="template-overlay"></div>
+                        </div>
+                        <div class="template" data-template="3" style="background-image: url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');">
+                            <div class="template-overlay"></div>
+                        </div>
+                        <div class="template" data-template="4" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');">
+                            <div class="template-overlay"></div>
+                        </div>
+                        <div class="template" data-template="5" style="background-image: url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');">
+                            <div class="template-overlay"></div>
+                        </div>
+                        <div class="template" data-template="6" style="background-image: url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');">
+                            <div class="template-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group upload-container">
+                    <label>Upload Your Own Image</label>
+                    <label for="imageUpload" class="upload-btn">
+                        <i class="fas fa-upload"></i> Choose Image
+                    </label>
+                    <input type="file" id="imageUpload" accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label>Text Color</label>
+                    <div class="color-options">
+                        <div class="color-option selected" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
+                        <div class="color-option" style="background-color: #0077B5;" data-color="#0077B5"></div>
+                        <div class="color-option" style="background-color: #000000;" data-color="#000000"></div>
+                        <div class="color-option" style="background-color: #F5F5F5;" data-color="#F5F5F5"></div>
+                        <div class="color-option" style="background-color: #FF6B6B;" data-color="#FF6B6B"></div>
+                        <div class="color-option" style="background-color: #4CAF50;" data-color="#4CAF50"></div>
+                        <div class="color-option" style="background-color: #FFC107;" data-color="#FFC107"></div>
+                        <div class="color-option" style="background-color: #9C27B0;" data-color="#9C27B0"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Overlay Color</label>
+                    <div class="color-options">
+                        <div class="color-option selected" style="background-color: #0077B5;" data-overlay="rgba(0, 119, 181, 0.7)"></div>
+                        <div class="color-option" style="background-color: #000000;" data-overlay="rgba(0, 0, 0, 0.7)"></div>
+                        <div class="color-option" style="background-color: #333333;" data-overlay="rgba(51, 51, 51, 0.7)"></div>
+                        <div class="color-option" style="background-color: #6B46C1;" data-overlay="rgba(107, 70, 193, 0.7)"></div>
+                        <div class="color-option" style="background-color: #3182CE;" data-overlay="rgba(49, 130, 206, 0.7)"></div>
+                        <div class="color-option" style="background-color: #E53E3E;" data-overlay="rgba(229, 62, 62, 0.7)"></div>
+                        <div class="color-option" style="background-color: #38A169;" data-overlay="rgba(56, 161, 105, 0.7)"></div>
+                    </div>
+                </div>
+
+                <div class="advanced-options">
+                    <button class="toggle-advanced" id="toggleAdvanced">
+                        <i class="fas fa-chevron-down"></i> Advanced Options
+                    </button>
+                    <div class="advanced-content" id="advancedContent">
+                        <div class="form-group">
+                            <label>Text Alignment</label>
+                            <div class="text-align-options">
+                                <button class="text-align-btn selected" data-align="left">Left</button>
+                                <button class="text-align-btn" data-align="center">Center</button>
+                                <button class="text-align-btn" data-align="right">Right</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Font Style</label>
+                            <div class="font-options">
+                                <button class="font-option selected" data-font="'Playfair Display', serif">Playfair</button>
+                                <button class="font-option" data-font="'Montserrat', sans-serif">Montserrat</button>
+                                <button class="font-option" data-font="'Poppins', sans-serif">Poppins</button>
+                                <button class="font-option" data-font="Arial, sans-serif">Arial</button>
+                                <button class="font-option" data-font="Georgia, serif">Georgia</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Social Links</label>
+                            <input type="text" id="linkedinUrl" placeholder="LinkedIn Profile URL" class="social-input">
+                            <input type="text" id="websiteUrl" placeholder="Website URL" class="social-input" style="margin-top: 8px;">
+                            <input type="text" id="emailAddress" placeholder="Email Address" class="social-input" style="margin-top: 8px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="download-container">
+                    <button id="downloadBtn" class="btn"><i class="fas fa-download"></i> Download Banner</button>
+                </div>
+            </div>
+
+            <div class="preview-panel">
+                <div class="banner-container" id="bannerPreview" style="background-image: url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');">
+                    <div class="banner-overlay" style="background: linear-gradient(to right, rgba(0, 119, 181, 0.7), rgba(0, 119, 181, 0.3));">
+                        <div class="banner-name" style="color: #FFFFFF; text-align: left; font-family: 'Playfair Display', serif;">John Doe</div>
+                        <div class="banner-title" style="color: #FFFFFF; text-align: left;">Digital Marketing Specialist</div>
+                        <div class="banner-tagline" style="color: #FFFFFF; text-align: left;">Helping brands grow through strategic marketing</div>
+                        <div class="social-icons">
+                            <div class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></div>
+                            <div class="social-icon" title="Website"><i class="fas fa-globe"></i></div>
+                            <div class="social-icon" title="Email"><i class="fas fa-envelope"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        // DOM Elements
+        const fullNameInput = document.getElementById('fullName');
+        const jobTitleInput = document.getElementById('jobTitle');
+        const taglineInput = document.getElementById('tagline');
+        const bannerPreview = document.getElementById('bannerPreview');
+        const bannerOverlay = document.querySelector('.banner-overlay');
+        const bannerName = document.querySelector('.banner-name');
+        const bannerTitle = document.querySelector('.banner-title');
+        const bannerTagline = document.querySelector('.banner-tagline');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const templates = document.querySelectorAll('.template');
+        const colorOptions = document.querySelectorAll('.color-option[data-color]');
+        const overlayOptions = document.querySelectorAll('.color-option[data-overlay]');
+        const toggleAdvanced = document.getElementById('toggleAdvanced');
+        const advancedContent = document.getElementById('advancedContent');
+        const textAlignBtns = document.querySelectorAll('.text-align-btn');
+        const fontOptions = document.querySelectorAll('.font-option');
+        const imageUpload = document.getElementById('imageUpload');
+        const toast = document.getElementById('toast');
+        const linkedinUrl = document.getElementById('linkedinUrl');
+        const websiteUrl = document.getElementById('websiteUrl');
+        const emailAddress = document.getElementById('emailAddress');
+
+        // Show toast message
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Update banner preview in real-time
+        function updateBanner() {
+            bannerName.textContent = fullNameInput.value || "Your Name";
+            bannerTitle.textContent = jobTitleInput.value || "Your Job Title";
+            bannerTagline.textContent = taglineInput.value || "Your professional tagline";
+        }
+
+        // Event listeners for inputs
+        fullNameInput.addEventListener('input', updateBanner);
+        jobTitleInput.addEventListener('input', updateBanner);
+        taglineInput.addEventListener('input', updateBanner);
+
+        // Template selection
+        templates.forEach(template => {
+            template.addEventListener('click', function() {
+                templates.forEach(t => t.classList.remove('selected'));
+                this.classList.add('selected');
+                const bgImage = this.style.backgroundImage;
+                bannerPreview.style.backgroundImage = bgImage;
+            });
+        });
+
+        // Image upload
+        imageUpload.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    bannerPreview.style.backgroundImage = `url(${event.target.result})`;
+                    // Deselect all templates
+                    templates.forEach(t => t.classList.remove('selected'));
+                    showToast('Custom image uploaded successfully!');
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        // Text color selection
+        colorOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                colorOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                const color = this.getAttribute('data-color');
+                bannerName.style.color = color;
+                bannerTitle.style.color = color;
+                bannerTagline.style.color = color;
+                document.querySelectorAll('.social-icon').forEach(icon => {
+                    icon.style.color = color;
+                });
+            });
+        });
+
+        // Overlay color selection
+        overlayOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                overlayOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                const overlay = this.getAttribute('data-overlay');
+                bannerOverlay.style.background = `linear-gradient(to right, ${overlay}, rgba(0, 0, 0, 0.3))`;
+            });
+        });
+
+        // Toggle advanced options
+        toggleAdvanced.addEventListener('click', function() {
+            advancedContent.classList.toggle('show');
+            const icon = this.querySelector('i');
+            icon.style.transform = advancedContent.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+        });
+
+        // Text alignment
+        textAlignBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                textAlignBtns.forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                const align = this.getAttribute('data-align');
+                bannerName.style.textAlign = align;
+                bannerTitle.style.textAlign = align;
+                bannerTagline.style.textAlign = align;
+            });
+        });
+
+        // Font selection
+        fontOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                fontOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                const font = this.getAttribute('data-font');
+                bannerName.style.fontFamily = font;
+            });
+        });
+
+        // Social links
+        linkedinUrl.addEventListener('input', function() {
+            const icon = document.querySelector('.social-icon:nth-child(1)');
+            icon.title = this.value || "LinkedIn";
+        });
+
+        websiteUrl.addEventListener('input', function() {
+            const icon = document.querySelector('.social-icon:nth-child(2)');
+            icon.title = this.value || "Website";
+        });
+
+        emailAddress.addEventListener('input', function() {
+            const icon = document.querySelector('.social-icon:nth-child(3)');
+            icon.title = this.value || "Email";
+        });
+
+        // Download banner
+        downloadBtn.addEventListener('click', function() {
+            // Validate required fields
+            if (!fullNameInput.value.trim()) {
+                showToast('Please enter your name');
+                fullNameInput.focus();
+                return;
+            }
+
+            // Show loading state
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            this.disabled = true;
+            
+            // Use html2canvas to capture the banner
+            html2canvas(bannerPreview, {
+                scale: 2, // Higher quality
+                logging: false,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                // Create download link
+                const link = document.createElement('a');
+                link.download = 'linkedin-banner.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // Reset button
+                this.innerHTML = originalText;
+                this.disabled = false;
+                showToast('Banner downloaded successfully!');
+            }).catch(err => {
+                console.error('Error generating banner:', err);
+                showToast('Error generating banner. Please try again.');
+                this.innerHTML = originalText;
+                this.disabled = false;
+            });
+        });
+
+        // Initialize
+        updateBanner();
+    </script>
+</body>
+</html>
